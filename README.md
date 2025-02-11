@@ -15,6 +15,17 @@ This project focuses on **cloud security testing** by deploying a **vulnerable A
 - **Azure Services** – Blob Storage, Managed Identities, Functions, Key Vault  
 - **Tools** – AWS CLI, Pacu (AWS exploitation framework), ScoutSuite (cloud security auditing), Burp Suite  
 
+## Repository Structure
+```
+/
+│── infrastructure/  # Terraform scripts for deploying vulnerable AWS/Azure setup
+│── exploitation/    # Security testing scripts
+│── mitigation/      # Security best practices and fixes
+│── reports/         # Sample security assessment reports
+│── README.md        # Project documentation
+│── requirements.txt # Dependencies (if needed)
+```
+
 ## Setup and Deployment
 ### Prerequisites
 - AWS or Azure account with IAM access  
@@ -30,7 +41,7 @@ This project focuses on **cloud security testing** by deploying a **vulnerable A
    ```
 2. Add a **misconfigured IAM policy** allowing privilege escalation:  
    ```sh
-   aws iam create-policy --policy-name VulnerablePolicy --policy-document file://vulnerable_policy.json
+   aws iam create-policy --policy-name VulnerablePolicy --policy-document file://infrastructure/vulnerable_policy.json
    ```
 3. Deploy a **Lambda function with hardcoded secrets** (for serverless attack simulation).
 
@@ -45,7 +56,7 @@ This project focuses on **cloud security testing** by deploying a **vulnerable A
    ```
 3. Deploy an **Azure Function with misconfigured managed identity**.
 
-## Attack Scenarios
+## Exploitation and Attack Scenarios
 ### 🔥 **S3 Bucket Takeover**
 - Use `aws s3 ls s3://vulnerable-bucket/` to verify public access.  
 - Exploit public bucket to retrieve **sensitive files**.  
