@@ -19,8 +19,21 @@ This project focuses on **cloud security testing** by deploying a **vulnerable A
 ```
 /
 │── infrastructure/  # Terraform scripts for deploying vulnerable AWS/Azure setup
+│   ├── aws/         # AWS-specific infrastructure deployment
+│   │   ├── main.tf  # Terraform script for AWS
+│   │   ├── variables.tf
+│   │   ├── outputs.tf
+│   ├── azure/       # Azure-specific infrastructure deployment
+│   │   ├── main.tf  # Terraform script for Azure
+│   │   ├── variables.tf
+│   │   ├── outputs.tf
 │── exploitation/    # Security testing scripts
+│   ├── s3_exploit.py
+│   ├── iam_privesc.py
+│   ├── api_abuse.py
 │── mitigation/      # Security best practices and fixes
+│   ├── aws_mitigations.md
+│   ├── azure_mitigations.md
 │── reports/         # Sample security assessment reports
 │── README.md        # Project documentation
 │── requirements.txt # Dependencies (if needed)
@@ -34,27 +47,22 @@ This project focuses on **cloud security testing** by deploying a **vulnerable A
 
 ### Deployment Steps
 #### **AWS Setup**
-1. Create an **S3 bucket** with public access:  
+1. Initialize Terraform and deploy resources:
    ```sh
-   aws s3api create-bucket --bucket vulnerable-bucket --region us-east-1
-   aws s3api put-public-access-block --bucket vulnerable-bucket --public-access-block-configuration BlockPublicAcls=false
+   cd infrastructure/aws
+   terraform init
+   terraform apply -auto-approve
    ```
-2. Add a **misconfigured IAM policy** allowing privilege escalation:  
-   ```sh
-   aws iam create-policy --policy-name VulnerablePolicy --policy-document file://infrastructure/vulnerable_policy.json
-   ```
-3. Deploy a **Lambda function with hardcoded secrets** (for serverless attack simulation).
+2. Verify deployed S3 bucket and IAM role permissions.
 
 #### **Azure Setup**
-1. Create a **Blob Storage container** with public access:  
+1. Initialize Terraform and deploy resources:
    ```sh
-   az storage container create --name vulnerable-container --public-access blob
+   cd infrastructure/azure
+   terraform init
+   terraform apply -auto-approve
    ```
-2. Assign a **role with excessive permissions** to a user:
-   ```sh
-   az role assignment create --role "Owner" --assignee <User-ID>
-   ```
-3. Deploy an **Azure Function with misconfigured managed identity**.
+2. Validate deployed storage account and role assignments.
 
 ## Exploitation and Attack Scenarios
 ### 🔥 **S3 Bucket Takeover**
@@ -90,4 +98,4 @@ This project focuses on **cloud security testing** by deploying a **vulnerable A
 Pull requests are welcome! If you have suggestions for additional attack vectors, feel free to contribute.
 
 ## Disclaimer
-**This project is for educational purposes only. Unauthorized testing on third-party cloud environments is illegal.**
+**This project is for educational purposes only. Unauthorized testing on third-party cloud environments is illegal.*
